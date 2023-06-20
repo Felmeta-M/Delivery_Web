@@ -252,7 +252,7 @@ export default function CartPage() {
                     </tr>
                   ))}
                   <tr>
-                    <td></td>
+                    <td>Total</td>
                     <td></td>
                     <td>${total}</td>
                   </tr>
