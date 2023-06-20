@@ -68,9 +68,13 @@ const CityHolder = styled.div`
   display: flex;
   gap: 5px;
 `;
+const FieldError = styled.div`
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+`;
 
-export default  function CartPage() {
-
+export default function CartPage() {
   const { cartProducts, addProduct, removeProduct, clearCart } =
     useContext(CartContext);
   const [products, setProducts] = useState([]);
@@ -81,8 +85,14 @@ export default  function CartPage() {
   const [streetAddress, setStreetAddress] = useState('');
   const [country, setCountry] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
-  const {isLoaded,isSignedIn} =useUser();
-  const router=useRouter();
+  const { isLoaded, isSignedIn } = useUser();
+  const router = useRouter();
+  const [nameError, setNameError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [cityError, setCityError] = useState('');
+  const [postalCodeError, setPostalCodeError] = useState('');
+  const [streetAddressError, setStreetAddressError] = useState('');
+  const [countryError, setCountryError] = useState('');
 
   useEffect(() => {
     if (cartProducts.length > 0) {
@@ -110,7 +120,6 @@ export default  function CartPage() {
   }
   async function goToPayment() {
     if (isLoaded && !isSignedIn) {
-
       await Swal.fire({
         icon: 'info',
         title: 'Not Logged In',
@@ -118,22 +127,57 @@ export default  function CartPage() {
       });
       router.push('/sign-in');
     } else {
-      const response = await axios.post('/api/checkout', {
-        name,
-        email,
-        city,
-        postalCode,
-        streetAddress,
-        country,
-        cartProducts,
-      });
-      if (response.data.url) {
-        // Redirect the user to the payment URL
-        window.location = response.data.url;
+      let isValid = true;
+
+      if (name.trim() === '') {
+        isValid = false;
+        setNameError('Please enter your name');
+      }
+
+      if (email.trim() === '') {
+        isValid = false;
+        setEmailError('Please enter your email');
+      }
+
+      if (city.trim() === '') {
+        isValid = false;
+        setCityError('Please enter your city');
+      }
+
+      if (postalCode.trim() === '') {
+        isValid = false;
+        setPostalCodeError('Please enter your postal code');
+      }
+
+      if (streetAddress.trim() === '') {
+        isValid = false;
+        setStreetAddressError('Please enter your street address');
+      }
+
+      if (country.trim() === '') {
+        isValid = false;
+        setCountryError('Please enter your country');
+      }
+
+      if (isValid) {
+        const response = await axios.post('/api/checkout', {
+          name,
+          email,
+          city,
+          postalCode,
+          streetAddress,
+          country,
+          cartProducts,
+        });
+
+        if (response.data.url) {
+          // Redirect the user to the payment URL
+          window.location = response.data.url;
+        }
       }
     }
   }
-  
+
   let total = 0;
   for (const productId of cartProducts) {
     const price = products.find((p) => p._id === productId)?.price || 0;
@@ -177,7 +221,12 @@ export default  function CartPage() {
                     <tr key={product._id}>
                       <ProductInfoCell>
                         <ProductImageBox>
-                          <Image src={product.images[0]} alt="" width={150} height={150} />
+                          <Image
+                            src={product.images[0]}
+                            alt=""
+                            width={150}
+                            height={150}
+                          />
                         </ProductImageBox>
                         {product.title}
                       </ProductInfoCell>
@@ -219,46 +268,73 @@ export default  function CartPage() {
                 placeholder="Name"
                 value={name}
                 name="name"
-                onChange={(ev) => setName(ev.target.value)}
+                onChange={(ev) => {
+                  setName(ev.target.value);
+                  setNameError('');
+                }}
               />
+              {nameError && <FieldError>{nameError}</FieldError>}
               <Input
                 type="text"
                 placeholder="Email"
                 value={email}
                 name="email"
-                onChange={(ev) => setEmail(ev.target.value)}
-                
+                onChange={(ev) => {
+                  setEmail(ev.target.value);
+                  setEmailError('');
+                }}
               />
+              {emailError && <FieldError>{emailError}</FieldError>}
               <CityHolder>
                 <Input
                   type="text"
                   placeholder="City"
                   value={city}
                   name="city"
-                  onChange={(ev) => setCity(ev.target.value)}
+                  onChange={(ev) => {
+                    setCity(ev.target.value);
+                    setCityError('');
+                  }}
                 />
+
                 <Input
                   type="text"
                   placeholder="Postal Code"
                   value={postalCode}
                   name="postalCode"
-                  onChange={(ev) => setPostalCode(ev.target.value)}
+                  onChange={(ev) => {
+                    setPostalCode(ev.target.value);
+                    setPostalCodeError('');
+                  }}
                 />
               </CityHolder>
+              {cityError && <FieldError>{cityError}</FieldError>}
+              {postalCodeError && <FieldError>{postalCodeError}</FieldError>}
               <Input
                 type="text"
                 placeholder="Street Address"
                 value={streetAddress}
                 name="streetAddress"
-                onChange={(ev) => setStreetAddress(ev.target.value)}
+                onChange={(ev) => {
+                  setStreetAddress(ev.target.value);
+                  setStreetAddressError('');
+                }}
               />
+              {streetAddressError && (
+                <FieldError>{streetAddressError}</FieldError>
+              )}
+
               <Input
                 type="text"
                 placeholder="Country"
                 value={country}
                 name="country"
-                onChange={(ev) => setCountry(ev.target.value)}
+                onChange={(ev) => {
+                  setCountry(ev.target.value);
+                  setCountryError('');
+                }}
               />
+              {countryError && <FieldError>{countryError}</FieldError>}
               <Button black block onClick={goToPayment}>
                 Continue to payment
               </Button>

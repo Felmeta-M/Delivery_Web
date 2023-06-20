@@ -1,10 +1,7 @@
 import React from 'react';
 import Footer from './footer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faFacebookF,
-  faInstagram,
-} from '@fortawesome/free-brands-svg-icons';
+import { faFacebookF, faInstagram } from '@fortawesome/free-brands-svg-icons';
 
 export function FooterContainer() {
   return (
@@ -14,8 +11,8 @@ export function FooterContainer() {
           <Footer.Column>
             <Footer.Title>About Us</Footer.Title>
             <Footer.Link href="#">
-              Story Lorem Ipsum is simply dummy text of the printing and
-              typesetting industry. Lorem Ipsum{' '}
+              Our website offers the convenience of having your desired
+              products delivered.
             </Footer.Link>
           </Footer.Column>
           <Footer.Column>

@@ -66,14 +66,14 @@ export default function Featured({ product }) {
         <ColumnsWrapper>
           <Column>
             <div>
-              <Title>  Deliverd To Your Door</Title>
+              <Title> Deliverd To Your Door</Title>
               <Desc>
-               Order what ever you like  the industrys standard dummy text
-                ever since the 1500s, it to make a type specimen book. It has
-                survived not only five centuries Lorem Ipsum has been the
-                industrys standard dummy text ever since the 1500s, it to make a
-                type specimen book. It has survived not only five centuries
-                Lorem
+                Delivered To Your Door - Our delivery website offers the
+                convenience of having your desired products delivered directly
+                to your doorstep. With a seamless ordering process, we ensure
+                your items are swiftly delivered, making your life easier and
+                saving you time. Experience the ease and efficiency of our
+                reliable door-to-door delivery service today.
               </Desc>
               <ButtonsWrapper>
                 <Button primary onClick={handleClick}>
@@ -87,7 +87,9 @@ export default function Featured({ product }) {
             <Image
               src="https://res.cloudinary.com/creavers-deliveryapp/image/upload/v1687040296/boxqzgas8pscvnlz8jrn.jpg"
               alt="delivery"
-              height={400} width={500} />
+              height={400}
+              width={500}
+            />
           </Column>
         </ColumnsWrapper>
       </Center>
